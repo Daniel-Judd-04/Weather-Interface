@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WeatherX</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/imgs/Favicon.png">
+    <link rel="apple-touch-icon" href="/imgs/Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/build/ol.js"></script>
+    <style type="text/css">/* Chart.js */
+        /*
+         * DOM element rendering detection
+         * https://davidwalsh.name/detect-node-insertion
+         */
+        @keyframes chartjs-render-animation {
+            from { opacity: 0.99; }
+            to { opacity: 1; }
+        }
+        
+        .chartjs-render-monitor {
+            animation: chartjs-render-animation 0.001s;
+        }
+        
+        /*
+         * DOM element resizing detection
+         * https://github.com/marcj/css-element-queries
+         */
+        .chartjs-size-monitor,
+        .chartjs-size-monitor-expand,
+        .chartjs-size-monitor-shrink {
+            position: absolute;
+            direction: ltr;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            visibility: hidden;
+            z-index: -1;
+        }
+        
+        .chartjs-size-monitor-expand > div {
+            position: absolute;
+            width: 1000000px;
+            height: 1000000px;
+            left: 0;
+            top: 0;
+        }
+        
+        .chartjs-size-monitor-shrink > div {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            left: 0;
+            top: 0;
+        }
+        </style>
+</head>
+
+<body onload="start()">
+    <div class="content">
+
+<!-- HEADER -->
+        <div class="header flex-row">
+            <div class="title flex-row "><img class="logo" id="logo" src="imgs/Logos/Normal_Logo.png">Weather<span
+                    style="color: var(--BolTxt);">X</span></div>
+            <div class="search-container flex-row">
+                <input type="text" autocomplete="off" class="search" id="search-bar"
+                    placeholder="Search for a country..." oninput="updateAutoFill(this)"
+                    onfocusout="removeResults(this)"
+                    onclick="if (this.value.length > 0) updateAutoFill(this); this.select();">
+                <span class="search-symbol material-symbols-outlined" onclick="searchCommit('search-bar')">search</span>
+                <div class="results-container" id="results-container" onmouseenter="updateResultHover()">
+                    <!-- Results added in JS -->
+                </div>
+            </div>
+            <div class="header-button-container flex-row">
+                <div class="button flex-row" id="account-button"
+                    onclick="openPopUp(document.getElementById('account-container'))">
+                    <!-- logout button -->
+                    <span class="material-symbols-outlined button-symbol">person</span>
+                </div>
+                <div class="button flex-row" onclick="openPopUp(document.getElementById('settings-container'))"><span
+                        class="material-symbols-outlined button-symbol">settings</span>
+                </div>
+            </div>
+        </div>
+
+<!-- MESSAGE -->
+        <div class="message flex-row" id="user-message"></div>
+
+
+        <div class="middle flex-row">
+<!-- MAP SECTION -->
+            <div class="map-container flex-row">
+                <div class="overlay-container">
+                    <div class="info-container" id="info-container">
+                        <div class="sub-header">Now</div>
+                        <div class="current-info" id="now-0"></div> <!-- DATE  -->
+                        <div class="current-info time" id="now-1"></div> <!-- TIME XX:XX -->
+
+                        <div class="current-temp flex-row" id="now-2"><img src="imgs/Weather Icons/10d.png"></div> <!-- IMG and TEMP -->
+                        <div class="feels feels-text">Feels like</div>
+                        <div class="feels feels-temp" id="now-3"></div> <!-- FEELS XX° -->
+                        <div class="current-summary flex-row" id="now-4">Chance of drizzle in the next hour</div> <!-- DESC -->
+
+                        <div class="details" id="details">
+                            <div class="detail-container flex-col" id="detail-container">
+                                <div class="current-detail"><span 
+                                    class="material-symbols-outlined">arrow_upward</span>Maximum
+                                </div>
+                                <div class="current-detail"><span 
+                                    class="material-symbols-outlined">arrow_downward</span>Minimum
+                                </div>
+                                <div class="current-detail"><span 
+                                    class="material-symbols-outlined">air</span>Wind Speed
+                                </div>
+                                <div class="current-detail"><span
+                                    class="material-symbols-outlined">cloud</span>Cloudiness
+                                </div>
+                                <div class="current-detail"><span
+                                    class="material-symbols-outlined">humidity_mid</span>Humidity
+                                </div>
+                                <div class="current-detail"><span
+                                    class="material-symbols-outlined">visibility</span>Visibility
+                                </div>
+                                <div class="current-detail"><span 
+                                    class="material-symbols-outlined">speed</span>Pressure
+                                </div>
+                                <div class="current-detail"><span
+                                    class="material-symbols-outlined">local_florist</span>Sunrise
+                                </div>
+                                <div class="current-detail"><span
+                                    class="material-symbols-outlined">thermometer</span>Sunset
+                                </div>
+                            </div>
+
+                            <div class="value-container flex-col" id="value-container">
+                                <div class="current-value" id="now-5"></div> <!-- MAX XX° -->
+                                <div class="current-value" id="now-6"></div> <!-- MIN XX° -->
+                                <div class="current-value" id="now-7"></div> <!-- WIND SPEED XXm/s -->
+                                <div class="current-value" id="now-8"></div> <!-- CLOUDINESS XX% -->
+                                <div class="current-value" id="now-9"></div> <!-- HUMIDITY XX% -->
+                                <div class="current-value" id="now-10"></div> <!-- VISIBILITY XXkm -->
+                                <div class="current-value" id="now-11"></div> <!-- PRESSURE XXXhPa -->
+                                <div class="current-value" id="now-12"></div> <!-- SUNRISE XX:XX -->
+                                <div class="current-value" id="now-13"></div> <!-- SUNSET XX:XX -->
+                            </div>
+                        </div>
+
+                        <div class="current-button flex-row" onclick="seeMore()" id="see-more">See More</div>
+                    </div>
+<!-- MAP OVERLAY SELECTOR -->
+                    <div class="map-toggle toggle flex-row" id="map-toggle">
+                        <div class="selector map-selector" id="selector-map-detail"></div>
+                        <div class="item flex-row" id="temp" onclick="changeSelect(this, 'translateX(-5vh)')"><span
+                                class="material-symbols-outlined">device_thermostat</span></div>
+                        <div class="item flex-row" id="rain" onclick="changeSelect(this, 'translateX(0)')"><span
+                                class="material-symbols-outlined">water_drop</span></div>
+                        <div class="item flex-row" id="wind" onclick="changeSelect(this, 'translateX(5vh)')"><span
+                                class="material-symbols-outlined">air</span></div>
+                    </div>
+
+<!-- LOCATION INDICATOR -->
+                    <div class="location flex-row" id="current-location"><span
+                            class="material-symbols-outlined">my_location</span>Current Location
+                    </div>
+<!-- CURRENT LOCATION PIN -->
+                    <div class="current-location-pin flex-row" id="current-location-pin"><span
+                        class="material-symbols-outlined">my_location</span>
+                    </div>
+                </div>
+<!-- MAIN MAP -->
+                <div class="map" id="map"></div>
+            </div>
+<!-- DAILY FORECAST -->
+            <div class="daily-container flex-col" id="daily-container">
+                <div class="button exit-button daily-exit flex-row" id="exit" onclick="closeDay()">
+                    <span class="material-symbols-outlined button-symbol">close</span>
+                </div>
+            </div> <!-- Added in JS -->
+        </div>
+
+<!-- HOURLY FORECAST -->
+        <div class="hourly-section" id="hourly-section">
+            <div class="chartjs-size-monitor">
+                <div class="chartjs-size-monitor-expand">
+                    <div class=""></div>
+                </div>
+                <div class="chartjs-size-monitor-shrink">
+                    <div class=""></div>
+                </div>
+            </div>
+            <canvas style="width: 90%; height: 100%;" class="hourly-graph chartjs-render-monitor"
+                id="hourly-graph"></canvas>
+            <div class="hourly-container flex-row" id="hourly-container"></div>
+        </div> <!-- Added in JS -->
+
+<!-- TRAVEL CONTAINER -->
+        <div class="travel-container">
+<!-- TRAVEL OPTIONS -->
+            <div class="options-container flex-row">
+                <div class="transport-toggle toggle flex-row" id="transport-toggle">
+                    <div class="selector transport-selector" id="selector-transport-detail"></div>
+                    <div class="item flex-row" id="walk" onclick="changeSelect(this, 'translateX(-7.5vh)')"><span
+                            class="material-symbols-outlined">directions_walk</span></div>
+                    <div class="item flex-row" id="cycle" onclick="changeSelect(this, 'translateX(-2.5vh)')"><span
+                            class="material-symbols-outlined">directions_bike</span></div>
+                    <div class="item flex-row" id="bus" onclick="changeSelect(this, 'translateX(2.5vh)')"><span
+                            class="material-symbols-outlined">directions_car</span></div>
+                    <div class="item flex-row" id="train" onclick="changeSelect(this, 'translateX(7.5vh)')"><span
+                            class="material-symbols-outlined">train</span></div>
+                </div>
+
+                <div class="search-container search-transport-container flex-row">
+                    <input type="text" autocomplete="off" class="search search-transport" id="search-bar-from"
+                        placeholder="From..." oninput="updateAutoFill(this)" onfocusout="removeResults(this)"
+                        onclick="if (this.value.length > 0) updateAutoFill(this); this.select();">
+                    <div class="results-container results-container-travel" id="results-container-from"
+                        onmouseenter="updateResultHover()"></div> <!-- Added in JS -->
+                </div>
+
+                <div class="search-container search-transport-container flex-row">
+                    <input type="text" autocomplete="off" class="search search-transport" id="search-bar-to"
+                        placeholder="To..." oninput="updateAutoFill(this)" onfocusout="removeResults(this)"
+                        onclick="if (this.value.length > 0) updateAutoFill(this); this.select();">
+                    <div class="results-container results-container-travel" id="results-container-to"
+                        onmouseenter="updateResultHover()"></div> <!-- Added in JS -->
+                </div>
+
+                <input type="time" class="time-input" id="time-input" value="18:30" title="Arrive By">
+
+                <div class="button flex-row" title="Go" onclick="getTransportLocations()"><span class="material-symbols-outlined button-symbol">manage_search</span></div>
+            </div>
+
+<!-- TRAVEL RESULTS -->
+            <div class="travel-summary-container flex-row">
+                <div class="travel-summary" id="travel-summary">Leave<span> 13 </span>minutes early, at <span>17:03</span>, to arrive at<span> 18:31 </span>to avoid showers.
+                </div>
+            </div>
+
+            <div class="travel-results-container">
+                <div class="timing-container flex-col">
+                    <div class="timing" id="timing-0">
+                        <div class="timing-summary"><span>15</span> minutes later</div>
+                        <div class="timing-main">Leave at <span>17:18</span> to arrive at <span>18:46</span></div>
+                    </div>
+                    <div class="timing" id="timing-1">
+                        <div class="timing-summary"><span>26</span> minutes earlier</div>
+                        <div class="timing-main">Leave at <span>16:37</span> to arrive at <span>18:19</span></div>
+                    </div>
+                    <div class="timing" id="timing-2">
+                        <div class="timing-summary"><span>48</span> minutes earlier</div>
+                        <div class="timing-main">Leave at <span>16:15</span> to arrive at <span>17:57</span></div>
+                    </div>
+                </div> <!-- Added in JS -->
+
+                <div class="map map-travel" id="map-from">
+                    <div class="location location-travel flex-row" id="location-A"><span
+                            class="material-symbols-outlined">pin_drop</span>Point A
+                    </div>
+                </div>
+                <div class="map map-travel" id="map-to">
+                    <div class="location location-travel flex-row" id="location-B"><span
+                            class="material-symbols-outlined">pin_drop</span>Point B
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-cover" id="results-cover"></div>
+        </div>
+
+
+<!-- WEBSITE COVER (to hide the background when menus are open) -->
+        <div class="background-cover" id="background-cover"></div>
+
+<!-- MENUS -->
+        <div class="pop-up-container">
+<!-- SETTINGS -->
+            <div class="popup-container flex-col" id="settings-container">
+                <div class="heading-container flex-row">
+                    <div class="heading">Settings</div>
+                    <div class="exit-button button flex-row" onclick="closePopUp(this.parentElement.parentElement)">
+                        <span class="material-symbols-outlined button-symbol">close</span></div>
+                </div>
+
+                <div class="inputs flex-col" style="align-items: space-between;">
+                    <div class="input-container flex-row">
+                        <div class="text">
+                            <div class="label">Appearance</div>
+                            <div class="description">Choose a colour scheme that suits you. Decide on
+                                <span>DEFAULT</span>, <span>DARK</span>,
+                                <span>LIGHT</span>, <span>PINK</span>, <span>?</span> or <span>CONTRAST</span> colour
+                                mode.
+                            </div>
+                        </div>
+                        <div class="toggle input flex-row">
+                            <div class="selector col-selector" id="selector-colour-mode"></div>
+                            <div class="item flex-row" id="normal" onclick="changeSelect(this, 'translateX(-12.5vh)')">
+                                <span class="material-symbols-outlined">radio_button_unchecked</span></div>
+                            <div class="item flex-row" id="dark" onclick="changeSelect(this, 'translateX(-7.5vh)')">
+                                <span class="material-symbols-outlined">dark_mode</span></div>
+                            <div class="item flex-row" id="light" onclick="changeSelect(this, 'translateX(-2.5vh)')">
+                                <span class="material-symbols-outlined">light_mode</span></div>
+                            <div class="item flex-row" id="pink" onclick="changeSelect(this, 'translateX(2.5vh)')"><span
+                                    class="material-symbols-outlined">local_florist</span></div>
+                            <div class="item flex-row" id="question" onclick="changeSelect(this, 'translateX(7.5vh)')">
+                                <span class="material-symbols-outlined">question_mark</span></div>
+                            <div class="item flex-row" id="contrast" onclick="changeSelect(this, 'translateX(12.5vh)')">
+                                <span class="material-symbols-outlined">contrast</span></div>
+                        </div>
+                    </div>
+
+                    <div class="input-container flex-row">
+                        <div class="text">
+                            <div class="label">Temperature</div>
+                            <div class="description">Set your preferred measurement for temperature. Choose from
+                                <span>CELSIUS</span>, <span>FAHRENHEIT</span>
+                                or <span>KELVIN</span>.
+                            </div>
+                        </div>
+                        <div class="toggle input flex-row">
+                            <div class="selector temp-selector" id="selector-temp-mode"></div>
+                            <div class="item flex-row" id="far" onclick="changeSelect(this, 'translateX(-5vh)')">
+                                <span>°F</span>
+                            </div>
+                            <div class="item flex-row" id="cen" onclick="changeSelect(this, '')"><span>°C</span></div>
+                            <div class="item flex-row" id="kel" onclick="changeSelect(this, 'translateX(5vh)')">
+                                <span>°K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-container flex-row">
+                        <div class="text">
+                            <div class="label">Distance</div>
+                            <div class="description">Go the extra mile, customise the unit that the distance is measured
+                                in. Either go with
+                                <span>METRIC</span> or <span>IMPERIAL</span>.
+                            </div>
+                        </div>
+                        <div class="toggle input flex-row">
+                            <div class="selector dist-selector" id="selector-distance-mode"></div>
+                            <div class="item flex-row" id="metric" onclick="changeSelect(this, 'translateX(-2.5vh)')">
+                                <span>M</span>
+                            </div>
+                            <div class="item flex-row" id="imperial" onclick="changeSelect(this, 'translateX(2.5vh)')">
+                                <span>I</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-container flex-row">
+                        <div class="text">
+                            <div class="label">Newsletter</div>
+                            <div class="description">How often do you want a weather summary in your inbox?
+                                <span>FOUR</span> times a day?
+                                <span>TWICE</span> a day? <span>ONCE</span> a day?
+                            </div>
+                        </div>
+                        <div class="toggle input flex-row">
+                            <div class="selector freq-selector" id="selector-frequency-mode"></div>
+                            <div class="item flex-row" id="off" onclick="changeSelect(this, 'translateX(-7.5vh)')"><span
+                                    style="font-size: 2vh;">Off</span></div>
+                            <div class="item flex-row" id="one" onclick="changeSelect(this, 'translateX(-2.5vh)')">
+                                <span>1</span>
+                            </div>
+                            <div class="item flex-row" id="two" onclick="changeSelect(this, 'translateX(2.5vh)')">
+                                <span>2</span>
+                            </div>
+                            <div class="item flex-row" id="four" onclick="changeSelect(this, 'translateX(7.5vh)')">
+                                <span>4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!-- ACCOUNTS -->
+            <div class="popup-container account-container" id="account-container">
+
+<!-- LOGIN -->
+                <div class="login-container flex-col" id="login-container">
+                    <div class="heading-container flex-row">
+                        <div class="heading">Login</div>
+                        <div class="exit-button button flex-row"
+                            onclick="closePopUp(this.parentElement.parentElement.parentElement)"><span
+                                class="material-symbols-outlined button-symbol">close</span></div>
+                    </div>
+
+                    <div class="form-container flex-col">
+                        <input class="account-input input" id="login-username" type="text" pattern="[a-zA-Z0-9]*"
+                            placeholder="Username">
+
+                        <input class="account-input input" id="login-password" type="password" placeholder="Password">
+                    </div>
+
+                    <div class="flex-row">
+                        <div class="button account-button flex-row" onclick="login()">Login</div>
+                    </div>
+                    <div class="switch-type"
+                        onclick="document.getElementById('login-container').style.display = 'none'; document.getElementById('sign-up-container').style.display = 'block';">
+                        New? Sign Up
+                    </div> <!-- New? Sign Up -->
+                </div>
+
+<!-- SIGN UP -->
+                <div class="sign-up-container flex-col" id="sign-up-container">
+                    <div class="heading-container flex-row">
+                        <div class="heading">Sign Up</div>
+                        <div class="exit-button button flex-row"
+                            onclick="closePopUp(this.parentElement.parentElement.parentElement)"><span
+                                class="material-symbols-outlined button-symbol">close</span></div>
+                    </div>
+
+                    <div class="form-container sign-up-form-container flex-col">
+
+                        <input class="account-input input" id="sign-up-username" type="text" placeholder="Username">
+
+                        <input class="account-input input" id="sign-up-email" type="email" placeholder="Email">
+
+                        <input class="account-input input" id="sign-up-password" type="password" placeholder="Password">
+
+                        <input class="account-input input" id="sign-up-confirm" type="password"
+                            placeholder="Confirm Password">
+                    </div>
+
+                    <div class="flex-row">
+                        <div class="button account-button flex-row" onclick="signUp()">Sign Up</div>
+                    </div>
+                    <div class="switch-type"
+                        onclick="document.getElementById('login-container').style.display = 'block'; document.getElementById('sign-up-container').style.display = 'none';">
+                        Login
+                    </div> <!-- Login -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+<!-- WEBSITE COVER (Loading Screen) -->
+    <div class="website-cover" id="website-cover"></div>
+
+
+<!-- Acts as cities table -->
+    <script src="worldCities.js"></script>
+<!-- Acts as themes table -->
+    <script src="Colours.js"></script>
+    <script src="main.js"></script>
+<!-- For the hourly container graph -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</body>
+</html>

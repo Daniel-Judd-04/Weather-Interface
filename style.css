@@ -1,0 +1,1053 @@
+/* Set the CSS variables for the colours */
+:root {
+    --PriBG: #00487C;
+    --SecBG: #043565;
+    --ConBG: #043565;
+    --NorTxt: #EFEFEF;
+    --SubTxt: #CDCDCD;
+    --BolTxt: #D17400;
+    --PopBG: #00000080;
+    --High: #3BB273;
+    --Low: #E15554;
+    --Rain: #4D9DE0;
+    --HighlightCol: rgba(209, 116, 0, 0.99);
+}
+
+/* All elements */
+* {
+    font-family: 'Kanit', sans-serif;
+    cursor: default;
+    transition: color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Stop user from selecting text */
+/* Make sure user can select inputs */
+* :not(input) {
+    -webkit-user-select: none;
+}
+
+/* FLEX */
+/* ================================ */
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* GENERAL */
+/* ================================ */
+
+body {
+    background-color: var(--PriBG);
+    margin: 0;
+    width: 100%;
+}
+
+html {
+    -ms-overflow-style: none;
+    overflow-y: scroll;
+}
+
+::selection {
+    color: var(--PriBG);
+    background: var(--HighlightCol);
+}
+
+.content {
+    width: 100%;
+    height: 100vh;
+}
+
+span {
+    white-space: pre;
+    color: var(--BolTxt);
+}
+
+/* HEADER */
+/* ================================ */
+
+.header {
+    height: 10vh;
+    background: var(--PriBG);
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.logo {
+    height: 9vh;
+    margin-right: 20px;
+}
+
+.title {
+    height: 100%;
+    font-size: 8vh;
+    font-weight: 800;
+    color: var(--NorTxt);
+}
+
+.heading {
+    color: var(--BolTxt);
+    font-size: 6vh;
+    font-weight: 800;
+    width: 100%;
+}
+
+.search-container {
+    width: 30%;
+    height: 100%;
+    position: relative;
+    color: var(--BolTxt);
+}
+
+.search-transport-container {
+    width: fit-content;
+}
+
+.search {
+    cursor: text;
+    width: 100%;
+    height: 5vh;
+    border: none;
+    outline: none;
+    border-radius: 2vh;
+    font-size: 2.5vh;
+    padding-left: 40px;
+    padding-right: 0;
+    font-weight: 600;
+    background: var(--ConBG);
+    color: var(--NorTxt);
+}
+
+.search-transport {
+    padding-left: 10px;
+    width: 30vw;
+}
+
+::placeholder {
+    color: var(--SubTxt);
+}
+
+.search-symbol {
+    cursor: pointer;
+    position: absolute;
+    left: 10px;
+    font-size: 2.5vh !important;
+}
+
+.results-container {
+    position: absolute;
+    width: 100%;
+    top: 7.5vh;
+    background: var(--PopBG);
+    border-radius: 0 0 15px 15px;
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 900;
+}
+
+.results-container-travel {
+    width: calc(30vw + 10px);
+}
+
+.result {
+    cursor: pointer;
+    padding: 0.5vh 15px;
+    font-weight: 600;
+    font-size: 2vh;
+    color: var(--SubTxt);
+    transition: all 0s;
+    overflow-wrap: break-word;
+}
+
+.result:last-child {
+    border-radius: 0 0 15px 15px;
+    border-bottom: 0;
+}
+
+.result:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--BolTxt);
+}
+
+.header-button-container {
+    width: auto;
+    height: 100%;
+    gap: 20px;
+}
+
+.header-button-container > div {
+	font-weight: 800;
+}
+
+.button {
+    cursor: pointer;
+    height: 5vh;
+    padding-inline: 10px;
+    background: var(--PopBG);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    border-radius: 2vh;
+    transition: all 0.2s ease-in-out;
+    color: var(--SubTxt);
+    gap: 10px;
+}
+
+.button > span {
+    font-size: 3vh;
+}
+
+.button-symbol {
+    cursor: pointer;
+    color: var(--SubTxt);
+    transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+    color: var(--BolTxt);
+}
+
+.button:hover  .button-symbol{
+    color: var(--BolTxt);
+}
+
+.toggle {
+    position: relative;
+    width: fit-content;
+    height: 5vh;
+    border-radius: 2vh;
+    background: var(--ConBG);
+	backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.item {
+    cursor: pointer;
+    position: relative;
+    width: 5vh;
+    height: 5vh;
+    border-radius: 2vh;
+    z-index: 90;
+    transition: all 0.2s ease-in-out;
+}
+
+.item:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.item > span {
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    color: var(--NorTxt);
+    font-size: 3vh;
+}
+
+#temp > span, #normal > span, #cen > span, #metric > span, #one > span, #walk > span {
+    color: var(--BolTxt);
+}
+
+.selector {
+    width: 5vh;
+    height: 5vh;
+    z-index: 10;
+    position: absolute;
+    border-radius: 2vh;
+    border: 1px solid var(--SubTxt);
+    transition: all 0.3s ease-in-out;
+}
+
+.transport-selector {
+    transform: translateX(-7.5vh);
+}
+
+.col-selector {
+    transform: translateX(-12.5vh);
+}
+
+.map-selector {
+    transform: translateX(-5vh);
+}
+
+.freq-selector, .dist-selector {
+    transform: translateX(-2.5vh);
+}
+
+/* MAP SECTION */
+/* ================================ */
+.middle {
+    width: 100%;
+    height: 70vh;
+}
+
+.map-container {
+    width: 75%;
+    height: 100%;
+    position: relative;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+    /* Stop the map from being able to move */
+    pointer-events: none;
+}
+
+.overlay-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.map-toggle {
+    position: absolute;
+    z-index: 10;
+    left: calc(22vw + 30px);
+    top: 15px;
+    background: var(--PopBG);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+}
+
+.info-container {
+    position: absolute;
+    width: 22vw;
+    height: 24vh;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    border-radius: 2vh;
+    background: var(--PopBG);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: var(--NorTxt);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    transition: height 0.4s ease-in-out;
+}
+
+.sub-header {
+    position: absolute;
+    font-size: 7vh;
+    height: 5vh;
+    left: 1vw;
+    top: -1vh;
+    font-weight: 600;
+}
+
+.current-info {
+    position: absolute;
+    font-weight: 600;
+    font-size: 2vh;
+    top: 1vh;
+    right: 1vw;
+}
+
+.time {
+    top: 3.5vh;
+}
+
+.current-temp {
+    position: absolute;
+    font-size: 9vh;
+    font-weight: 700;
+    left: 0.5vw;
+    top: 5.5vh;
+}
+
+.current-temp > img {
+    height: 7vh;
+    border-radius: 0.5vh;
+    filter: drop-shadow(0 0 2px var(--NorTxt));
+    margin-right: .5vw;
+}
+
+.feels {
+    position: absolute;
+    top: calc(7vh + 15px);
+    right: 1vw;
+    font-size: 2vh;
+}
+
+.feels-temp {
+    font-size: 4vh;
+    font-weight: 600;
+    top: calc(8.5vh + 15px);
+}
+
+.current-summary {
+    position: absolute;
+    width: 100%;
+    top: 17vh;
+    font-weight: 600;
+    font-size: 2vh;
+    text-align: center;
+}
+
+.current-button {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 4vh;
+    font-size: 2vh;
+    font-weight: 700;
+    bottom: 0;
+    border-radius: 0 0 2vh 2vh;
+    transition: all 0.3s ease-in-out;
+}
+
+.current-button:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.details {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.detail-container, .value-container{
+    top: 18.5vh;
+    position: absolute;
+    height: 67.5%;
+}
+
+.value-container {
+	right: 1.5vw;
+}
+
+
+.current-detail, .current-value{
+    display: flex;
+    width: 100%;
+    height: calc(100% / 9.5);
+    align-items: center;
+    padding-left: 1vw;
+    font-weight: 600;
+    font-size: 2vh;
+}
+
+.current-value {
+    justify-content: right;
+}
+
+.wind_direction {
+    color: var(--NorTxt);
+}
+
+.current-detail > span {
+    padding-right: 1%;
+}
+
+.location {
+    gap: 1.25vh;
+    position: absolute;
+    z-index: 10;
+    bottom: 15px;
+    left: 50%; /* calc(30px + 22vw)*/
+    transform: translateX(-50%);
+    padding-inline: 1.25vh;
+    height: 5vh;
+    background: var(--PopBG);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    border-radius: 2vh;
+    color: var(--NorTxt);
+    font-size: 2vh;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.current-location-pin {
+    position: absolute;
+    z-index: 10;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    width: 5vh;
+    height: 5vh;
+    font-size: 2vh;
+    font-weight: 700;
+    transition: all 0.4s ease-in-out;
+}
+
+.location > span {
+    font-size: 3vh;
+}
+
+.location-travel {
+    top: 15px;
+    bottom: 0;
+    left: 15px;
+    transform: translateX(0);
+}
+
+/* DAILY FORECAST */
+/* ================================ */
+
+.daily-container {
+    width: 25%;
+    height: 100%;
+    color: var(--NorTxt);
+    position: relative;
+}
+
+.day {
+    position: relative;
+    width: 100%;
+    height: calc(100% / 10); /* 100% / num */
+    transition: all 0.25s ease-in-out;
+    border-bottom: 0.25vh solid var(--SubTxt);
+    background: var(--SecBG);
+    cursor: pointer;
+}
+
+.day > div {
+    pointer-events: none;
+} 
+
+.day .expand {
+    pointer-events: auto;
+}
+
+.day:last-child {
+    border-bottom: 0vh;
+}
+
+.date {
+    position: absolute;
+    top: 1vh;
+    left: 7vh;
+    font-size: 3.5vh;
+    font-weight: 800;
+    line-height: 5vh;
+    text-shadow: 0 0 3px var(--PriBG);
+    z-index: 9999;
+}
+
+.day-icon {
+    position: absolute;
+    top: 1vh;
+    left: 1vh;
+    z-index: 9999;
+}
+
+.day-icon-img {
+    height: 5vh;
+    border-radius: 0.5vh;
+    filter: drop-shadow(0 0 2px var(--NorTxt));
+}
+
+.day-range {
+    position: absolute;
+    bottom: 0.5vh;
+    right: 1.5vw;
+    text-shadow: 0 0 3px #121212;
+    font-size: 2vh;
+}
+
+.day-range > div {
+    width: 70%;
+    height: 50%;
+    padding-left: 20%;
+    display: flex;
+    align-items: center;
+}
+
+.high-temp > span{
+    color: var(--High);
+    font-size: 2vh;
+}
+
+.low-temp > span{
+    color: var(--Low);
+    font-size: 2vh;
+}
+
+.expand {
+    display: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s ease-in-out 0.2s;
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.day-map {
+    position: absolute;
+    top: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 18vh;
+    width: calc(100% - 30px);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+}
+
+.day-details-left, .day-details-right{
+    position: absolute;
+    top: 28vh;
+    gap: 2vh;
+    left: 0;
+    width: 50%;
+    height: 15vh;
+    justify-content: left;
+}
+
+.day-details-left > div, .day-details-right > div {
+    font-size: 2vh;
+	text-shadow: 0 0 3px var(--PriBG);
+}
+
+.day-details-left > div > span, .day-details-right > div > span {
+    font-size: 3vh;
+}
+
+.day-details-right {
+    left: 50%;
+}
+
+.day-expand-widget {
+    position: absolute;
+    width: 11vw; /* (25 - 3) / 2 */ 
+    height: 11vh;
+    left: 1vw;
+    top: 44vh;
+    background-color: var(--PopBG);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    border-radius: 2vh;
+    font-size: 6vh;
+    font-weight: 800;
+    transition: all 0.2s ease-in-out;
+}
+
+.day-expand-widget > span {
+    font-size: 5.5vh;
+}
+
+.day-twilight {
+    height: 24vh;
+    left: 13vw;
+    font-size: 4vh;
+    gap: 5%;
+}
+
+.twilight-symbol {
+    font-size: 5vh;
+}
+
+.day-twilight > div > span {
+    font-size: 3.5vh;
+}
+
+.sunrise > span {
+    transform: rotate(90deg);
+}
+
+.sunset > span {
+    transform: rotate(-90deg);
+}
+
+.day-rain {
+    top: 57vh;
+}
+
+.day-rain > span {
+    color: var(--Rain);
+}
+
+.day-temp > span {
+    color: var(--Low);
+}
+
+/* HOURLY FORECAST */
+/* ================================ */
+
+.hourly-section {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 15vh;
+    background: var(--PriBG);
+}
+
+.hourly-graph {
+    position: absolute;
+    max-width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 5vh;
+    top: 3vh;
+}
+
+.hourly-container {
+    position: absolute;
+    height: 100%;
+    width: 90%;
+    color: var(--NorTxt);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hour-container {
+    position: relative;
+    width: calc(100% / 36);
+    height: 100%;
+}
+
+.hour-temp {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 0 2px #121212;
+    font-size: 1.75vh;
+    height: 2vh;
+}
+
+.hour-rain {
+    width: 100%;
+    position: absolute;
+    bottom: 4.5vh;
+    text-align: center;
+    text-shadow: 0 0 2px #121212;
+    font-size: 1.25vh;
+}
+    
+    
+.hour-time {
+    width: 100%;
+    height: 20%;
+    position: absolute;
+    bottom: 5px;
+    font-weight: 600;
+    border-top: 1px solid var(--BolTxt);
+    text-shadow: 0 0 2px #121212;
+    font-size: 2vh;
+}
+
+/* TRAVEL RECOMMENDATION */
+/* ================================ */
+
+.travel-container {
+    position: relative;
+    height: 60vh;
+}
+
+.options-container {
+    width: 100%;
+    height: 10vh;
+    background: var(--PriBG);
+    border-top: 2px solid var(--NorTxt);
+    gap: 3vw;
+}
+
+.time-input {
+    width: fit-content;
+    color: var(--NorTxt);
+}
+
+.travel-summary-container {
+    width: 100%;
+    height: 10vh;
+    background: var(--SecBG);
+    color: var(--NorTxt);
+    text-align: center;
+    font-size: 4vh;
+    font-weight: 800;
+}
+
+.travel-summary {
+    width: 95%;
+}
+
+.travel-results-container {
+    width: 100%;
+    height: 40vh;
+    position: relative;
+}
+
+.timing-container {
+    width: calc(40% - 7.5vh);
+    height: 40vh;
+    background: var(--PriBG);
+    gap: 5%;
+}
+
+.timing {
+    width: 90%;
+    height: 25%;
+    background: var(--SecBG);
+    border-radius: 2vh;
+    border: 1px solid var(--NorTxt);
+}
+
+.timing-summary {
+    padding-inline: 2vh;
+    font-size: 4vh;
+    color: var(--NorTxt);
+}
+
+.timing-main {
+    padding-inline: 3vh;
+    font-size: 2vh;
+    color: var(--SubTxt);
+}
+
+.map-travel {
+    position: absolute;
+    top: 2.5vh;
+    right: calc(30% + 5vh);
+    float: left;
+    height: 35vh;
+    width: 30%;
+    box-shadow: 4px 4px 10px 0 #3030309a;
+}
+
+.map-travel:last-child {
+    right: 2.5vh;
+}
+
+.results-cover {
+    position: absolute;
+    display: none;
+    height: 50vh;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 800;
+    background: var(--PopBG);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    transition: height 0.5s ease-in-out;
+}
+
+/* POPUPs */
+/* ================================ */
+
+.exit-button {
+    position: absolute;
+    z-index: 9000;
+    right: 20px;
+    top: 20px;
+}
+
+.daily-exit {
+    right: 1vh;
+    top: 1vh;
+}
+
+.background-cover {
+    position: absolute;
+    width: 100%;
+    height: 160vh;
+    z-index: 85000;
+    left: 0;
+    top: 0;
+    display: none;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.popup-container {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -30%);
+    display: none;
+    width: 30vw;
+    z-index: 90000;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    min-width: 600px;
+    background: var(--PriBG);
+    padding: 20px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    border-radius: 2vh;
+}
+
+.sign-up-container {
+    display: none;
+}
+
+.inputs {
+    gap: 25px;
+    margin-top: 10px;
+}
+
+.form-container {
+    margin-top: 20px;
+    gap: 3vh;
+    width: 100%;
+}
+
+.form-container > div > div {
+    transform: translateY(1vh);
+}
+
+.sign-up-form-container {
+    gap: 2vh;
+}
+
+.input-container {
+    gap: 100px;
+}
+
+.label {
+    font-size: 3vh;
+    font-weight: 700;
+    color: var(--NorTxt);
+}
+
+.description {
+    word-break: keep-all;
+    white-space: normal;
+    line-height: 2vh;
+    font-size: 2vh;
+    text-align: left;
+    display: inline-block;
+    color: var(--SubTxt);
+}
+
+.text > span > span {
+    color: var(--BolTxt);
+}
+
+
+input {
+    width: 15vw;
+    height: 5vh;
+    border-radius: 2vh;
+    font-size: 2.5vh;
+    font-weight: 700;
+    color: var(--NorTxt);
+    background: var(--ConBG);
+    padding-inline: 10px;
+    border: none;
+}
+
+.account-input {
+    width: 80%;
+}
+
+input:not(input:-webkit-autofill)::-webkit-credentials-auto-fill-button {
+    background-color: var(--NorTxt);
+}
+
+input:not(input:-webkit-autofill)::-webkit-credentials-auto-fill-button:hover {
+    background-color: var(--BolTxt);
+}
+
+textarea:focus, input:focus {
+    outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--SecBG) inset !important;
+    -webkit-text-fill-color: var(--NorTxt) !important;
+}
+
+select {
+    -webkit-appearance: none;
+    width: 10vw;
+    height: 5vh;
+    border-radius: 2vh;
+    font-size: 2vh;
+    font-weight: 700;
+    padding-inline: 10px;
+    color: var(--BolTxt);
+    background: var(--ConBG);
+    border: none;
+}
+
+.account-button {
+    margin-top: 20px;
+    width: 25%;
+    color: var(--BolTxt);
+    font-size: 2.5vh;
+    font-weight: 700;
+    background: var(--ConBG);
+    padding-inline: 20px;
+}
+
+.account-button:hover {
+    color: var(--ConBG);
+    background: var(--BolTxt);
+}
+
+.switch-type {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--SubTxt);
+    text-decoration: underline;
+    transition: all 0.2s ease-in-out;
+}
+
+.switch-type:hover {
+    color: var(--BolTxt);
+}
+
+/* ON TOP */
+/* ================================ */
+
+/* Loading screen */
+.website-cover {
+	position: fixed;
+	z-index: 100001;
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    left: 0;
+    background: var(--PopBG);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all .5s ease-out;
+}
+
+/* Gives users context */
+.message {
+    position:fixed;
+    z-index: 100000;
+    width: fit-content;
+    height: 5vh;
+    padding-inline: 2vh;
+    top: 8vh;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 2vh;
+    background: var(--BolTxt);
+    box-shadow: 4px 4px 10px 0 #3030309a;
+    font-size: 2vh;
+    font-weight: 700;
+    color: var(--PriBG);
+    opacity: 0;
+    display: none;
+    transition: all 0.3s ease-out;
+}
+
+/* Removes map overlays */
+.ol-overlaycontainer-stopevent {
+    display: none;
+}
